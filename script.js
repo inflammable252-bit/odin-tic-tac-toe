@@ -16,19 +16,39 @@ function boardFactory() {
   }
  
   function checkCell(row, col) {
-   if ((row>0) && (col>0) && ((row<=3) && (col<=3))) {
+    if (checkInput(row, col) && checkIcon(row, col)) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
+  function checkInput(row, col) {
+    if ((row>0) && (col>0) && ((row<=3) && (col<=3))) {
       [row, col] = toIndex(row, col);
       return true
     }
     else {
-      this.errorMessage = "Error: Row and column value must be between 1-3.";
+      this.errorMessage = "Row and column value must be between 1-3.";
       return false;
     }
   }
+
+  function checkIcon(row, col) {
+    [row, col] = toIndex(row, col)
+    if ((board[row])[col] === "#") {
+      return true
+    }
+    else {
+      this.errorMessage = "Space occupied."
+      return false
+    }
+  }
   function selectCell(row, col, icon) {
-      [row, col] = toIndex(row, col);
-      // console.log(`Row Index: ${row}, Col Index: ${col}`);
-      (board[row])[col] = icon;
+    [row, col] = toIndex(row, col);
+    // console.log(`Row Index: ${row}, Col Index: ${col}`);
+    (board[row])[col] = icon;
   }
 
   return { board, checkCell, selectCell, errorMessage }
@@ -60,7 +80,7 @@ function Game() {
         turn++
       }
       else {
-        console.log(currentBoard.errorMessage)
+        console.error(`Error: ${errorMessage}`)
         return
       }
       displayBoard()
@@ -78,6 +98,7 @@ let currentGame = Game();
 currentGame.next(1,1)
 currentGame.next(1,2)
 currentGame.next(1,3)
+// console.log(currentGame.errorMessage)
 // currentGame.currentBoard.checkCell(1,2)
 
 const winRows = [[1,2,3],[4,5,6],[7,8,9]];
