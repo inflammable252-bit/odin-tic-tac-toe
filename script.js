@@ -51,7 +51,19 @@ function boardFactory() {
     (board[row])[col] = icon;
   }
 
-  return { board, checkCell, selectCell, errorMessage }
+  function getRemainingCells() {
+    let remainingIndices = [];
+    for (row of board) {
+      row.forEach((item, index) => {
+        if (item==="#") {
+          const rowIndex = board.indexOf(row)
+          remainingIndices.push([rowIndex, index])
+        }
+     })
+    }
+  console.log(remainingIndices)
+  }
+  return { board, checkCell, selectCell, errorMessage, getRemainingCells }
 }
 
 function createPlayer(name, icon) {
@@ -96,8 +108,10 @@ let player1 = createPlayer("bob", "x");
 let player2 = createPlayer("rob", "o");
 let currentGame = Game();
 currentGame.next(1,1)
-currentGame.next(1,2)
+currentGame.next(2,2)
 currentGame.next(1,3)
+console.log("Remaining:")
+currentGame.currentBoard.getRemainingCells()
 // console.log(currentGame.errorMessage)
 // currentGame.currentBoard.checkCell(1,2)
 
