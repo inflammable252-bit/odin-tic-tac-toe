@@ -61,8 +61,9 @@ function boardFactory() {
         }
      })
     }
-  console.log(remainingIndices)
+    return remainingIndices
   }
+
   return { board, checkCell, selectCell, errorMessage, getRemainingCells }
 }
 
@@ -97,21 +98,46 @@ function Game() {
       }
       displayBoard()
   }
+
+  let nextChoiceRow;
+  let nextChoiceCol;
+  function getRandomChoice() {
+    const remainingArr = returnRemaining();
+    const randomizer = Math.floor(Math.random() * remainingArr.length)
+    const randomFromArr = remainingArr[randomizer]
+    let [row, col] = randomFromArr
+    nextChoiceRow = row + 1;
+    nextChoiceCol = col + 1;
+    console.log(`Random item ${randomFromArr} is selected at index ${randomizer}. Row ${nextChoiceRow} and col ${nextChoiceCol} are returned for .next().`)
+  }
+
+  function autoNext() {
+    getRandomChoice()
+    next(nextChoiceRow,nextChoiceCol)
+  }
+
   const displayBoard = function() {
     console.log(currentBoard.board)
   };
-
-  return { currentBoard, currentPlayer, displayBoard, next }
+  const returnRemaining = function() {
+    return currentBoard.getRemainingCells();
+  }
+  return { currentBoard, currentPlayer, displayBoard, next, returnRemaining, autoNext }
 }
 
 let player1 = createPlayer("bob", "x");
 let player2 = createPlayer("rob", "o");
 let currentGame = Game();
-currentGame.next(1,1)
-currentGame.next(2,2)
-currentGame.next(1,3)
-console.log("Remaining:")
-currentGame.currentBoard.getRemainingCells()
+// currentGame.next(1,1)
+// currentGame.next(2,2)
+// currentGame.next(3,1)
+// currentGame.next(3,2)
+// currentGame.next(3,3)
+// console.log("Remaining:")
+// console.log(currentGame.returnRemaining())
+currentGame.autoNext()
+currentGame.autoNext()
+currentGame.autoNext()
 // console.log(currentGame.errorMessage)
 // currentGame.currentBoard.checkCell(1,2)
 
