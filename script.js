@@ -44,9 +44,13 @@ function createPlayer(name, icon) {
 
 function Game() {
   const currentBoard = boardFactory();
-  let currentPlayer = player1;
+  let currentPlayer = randomizeStart();
   let turn = 1;
-  
+
+  function randomizeStart() {
+    let playerNumber = Math.floor(Math.random()*2)+1;
+    return playerNumber === 1 ? player1 : player2;
+  }
   function next(row, col) {
     console.log(`Turn: ${turn}`)
     console.log(`current Player: ${currentPlayer.name}`);
@@ -59,10 +63,8 @@ function Game() {
         console.log(currentBoard.errorMessage)
         return
       }
-      
       displayBoard()
   }
-
   const displayBoard = function() {
     console.log(currentBoard.board)
   };
@@ -73,9 +75,9 @@ function Game() {
 let player1 = createPlayer("bob", "x");
 let player2 = createPlayer("rob", "o");
 let currentGame = Game();
-currentGame.next(1,0)
 currentGame.next(1,1)
 currentGame.next(1,2)
+currentGame.next(1,3)
 // currentGame.currentBoard.checkCell(1,2)
 
 const winRows = [[1,2,3],[4,5,6],[7,8,9]];
