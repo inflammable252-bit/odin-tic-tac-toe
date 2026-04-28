@@ -1,4 +1,4 @@
-function boardFactory() {
+function Board() { // factory with functions related to checking and modifying the board
   const board = []
   let errorMessage = "";
 
@@ -67,7 +67,7 @@ function boardFactory() {
   return { board, checkCell, selectCell, errorMessage, getRemainingCells }
 }
 
-function createPlayer(name, icon) {
+function createPlayer(name, icon) { //factory with player functions
   let score = 0;
   const increaseScore = () => {score++;}
   const decreaseScore = () => {if (score) score--;}
@@ -75,8 +75,8 @@ function createPlayer(name, icon) {
   return { name, icon, getScore, increaseScore, decreaseScore } 
 };
 
-function Game() {
-  const currentBoard = boardFactory();
+function Game() { // factory with game controls, display board
+  const currentBoard = Board();
   let currentPlayer = randomizeStart();
   let turn = 1;
 
@@ -103,9 +103,9 @@ function Game() {
   let nextChoiceCol;
   function getRandomChoice() {
     const remainingArr = returnRemaining();
-    const randomizer = Math.floor(Math.random() * remainingArr.length)
-    const randomFromArr = remainingArr[randomizer]
-    let [row, col] = randomFromArr
+    const randomizer = Math.floor(Math.random() * remainingArr.length);
+    const randomFromArr = remainingArr[randomizer];
+    let [row, col] = randomFromArr || [0,0];
     nextChoiceRow = row + 1;
     nextChoiceCol = col + 1;
     console.log(`Random item ${randomFromArr} is selected at index ${randomizer}. Row ${nextChoiceRow} and col ${nextChoiceCol} are returned for .next().`)
@@ -127,7 +127,25 @@ function Game() {
 
 let player1 = createPlayer("bob", "x");
 let player2 = createPlayer("rob", "o");
-let currentGame = Game();
+let currentGame = Game(); // note: initialize once (button press) for one consistent board -> iife instead of global needed?
+
+function playRound() { //uses Game() functions to play a round
+  let numberOfCells = currentGame.returnRemaining().length;
+  function autoRound() {
+    while (numberOfCells > 0) {
+      currentGame.autoNext()
+      numberOfCells = currentGame.returnRemaining().length;
+      // console.log(numberOfCells)
+    }
+    if (numberOfCells===0) {
+      console.log("Tie!")
+    }
+  }
+  // currentGame.autoNext()
+  return { autoRound }
+}
+playRound().autoRound()
+
 // currentGame.next(1,1)
 // currentGame.next(2,2)
 // currentGame.next(3,1)
@@ -135,9 +153,7 @@ let currentGame = Game();
 // currentGame.next(3,3)
 // console.log("Remaining:")
 // console.log(currentGame.returnRemaining())
-currentGame.autoNext()
-currentGame.autoNext()
-currentGame.autoNext()
+// currentGame.autoNext()
 // console.log(currentGame.errorMessage)
 // currentGame.currentBoard.checkCell(1,2)
 
@@ -148,10 +164,10 @@ const winCross = [[1,5,9][7,5,3]];
 
 function boardTest() {
 console.log("Test:")
-const board1 = boardFactory()
+const board1 = Board()
 board1.selectCell(1,1,"X")
 board1.displayBoard()
-const board2 = boardFactory()
+const board2 = Board()
 board2.selectCell(3,1,"O")
 board2.displayBoard()
 
