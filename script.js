@@ -1,3 +1,15 @@
+let player1 = createPlayer("bob", "x");
+let player2 = createPlayer("rob", "o");
+let currentGame = Game();
+
+function createPlayer(name, icon) { //factory with player functions
+let score = 0;
+const increaseScore = () => {score++;}
+const decreaseScore = () => {if (score) score--;}
+const getScore = () => score;
+return player = { name, icon, getScore, increaseScore, decreaseScore } 
+}
+
 function Board() { // factory with functions related to checking and modifying the board
   const board = []
   let errorMessage = "";
@@ -67,15 +79,7 @@ function Board() { // factory with functions related to checking and modifying t
   return { board, checkCell, selectCell, errorMessage, getRemainingCells }
 }
 
-function createPlayer(name, icon) { //factory with player functions
-  let score = 0;
-  const increaseScore = () => {score++;}
-  const decreaseScore = () => {if (score) score--;}
-  const getScore = () => score;
-  return { name, icon, getScore, increaseScore, decreaseScore } 
-};
-
-function Game() { // factory with game controls, display board
+function Game() { // factory with game controls, retrieve and request interactions with board
   const currentBoard = Board();
   let currentPlayer = randomizeStart();
   let turn = 1;
@@ -164,27 +168,28 @@ function Game() { // factory with game controls, display board
   return { currentBoard, displayBoard, next, returnRemaining, autoNext, returnWinStatus }
 }
 
-let player1 = createPlayer("bob", "x");
-let player2 = createPlayer("rob", "o");
-let currentGame = Game(); // note: initialize once (button press) for one consistent board -> iife instead of global needed?
-
-function playRound() { //uses Game() functions to play a round
+function Play() { //uses Game() functions to play a round and display to the DOM
   let numberOfCells = currentGame.returnRemaining().length;
+
   function autoRound() {
     while (numberOfCells > 0) {
       currentGame.autoNext()
       if (currentGame.returnWinStatus()) numberOfCells = 0;
       else numberOfCells = currentGame.returnRemaining().length;
+      }
       // console.log(numberOfCells)
-    }
-    if (numberOfCells===0 && !currentGame.returnWinStatus) {
+    if (numberOfCells===0 && !currentGame.returnWinStatus()) {
       console.log("Tie!")
     }
   }
-  // currentGame.autoNext()
-  return { autoRound }
+
+  function resetGame() {
+    currentGame = Game();
+  }
+  return { autoRound, resetGame }
 }
-playRound().autoRound()
+
+Play().autoRound()
 
 // currentGame.next(1,1)
 // currentGame.next(2,2)
@@ -204,8 +209,7 @@ playRound().autoRound()
 
 
 function playerTest() {
-  const bob = createPlayer("bob", "x");
-  const rob = createPlayer("rob", "o");
+  
   bob.increaseScore()
   console.log("Bob's score: " + bob.getScore())
   rob.decreaseScore()
