@@ -91,8 +91,8 @@ function Game() { // factory with game controls, display board
     if (currentBoard.checkCell(row, col)) {
         currentBoard.selectCell(row, col, currentPlayer.icon);
         displayBoard()
-        winStatus = checkWin(row, col, currentPlayer.icon)
-        if (winStatus) console.log(returnWin(winStatus))
+        winStatus = returnWin(checkWin(row, col, currentPlayer.icon))
+        if (winStatus) console.log((winStatus))
         turn++
         currentPlayer = (currentPlayer===player1) ? player2 : player1;
       }
@@ -158,7 +158,6 @@ function Game() { // factory with game controls, display board
   const returnRemaining = function() {
     return currentBoard.getRemainingCells();
   }
-
   const returnWinStatus = function() {
     return winStatus
   }
