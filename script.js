@@ -79,7 +79,6 @@ function Game() { // factory with game controls, display board
   const currentBoard = Board();
   let currentPlayer = randomizeStart();
   let turn = 1;
-  let gameActive = 1;
 
   function randomizeStart() {
     let playerNumber = Math.floor(Math.random()*2)+1;
@@ -120,8 +119,6 @@ function Game() { // factory with game controls, display board
   }
 
   function returnWin(winCondition) {
-    if (winCondition) gameActive = 0;
-    console.log(gameActive)
     switch (winCondition) {
       case "row":
         console.log(`Row of ${currentPlayer.icon}. ${currentPlayer.name} wins!`)
@@ -158,7 +155,7 @@ function Game() { // factory with game controls, display board
   const returnRemaining = function() {
     return currentBoard.getRemainingCells();
   }
-  return { currentBoard, displayBoard, next, returnRemaining, autoNext, checkWin, gameActive }
+  return { currentBoard, displayBoard, next, returnRemaining, autoNext, checkWin }
 }
 
 let player1 = createPlayer("bob", "x");
