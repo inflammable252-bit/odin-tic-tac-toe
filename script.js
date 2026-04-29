@@ -79,24 +79,60 @@ function Game() { // factory with game controls, display board
   const currentBoard = Board();
   let currentPlayer = randomizeStart();
   let turn = 1;
+  let gameActive = 1;
 
   function randomizeStart() {
     let playerNumber = Math.floor(Math.random()*2)+1;
     return playerNumber === 1 ? player1 : player2;
   }
-  function next(row, col) {
+  function next(row, col) { // refactor or do differently next time: next() should just take an index vs converting in all other functions
     console.log(`Turn: ${turn}`)
-    console.log(`current Player: ${currentPlayer.name}`);
+    console.log(`current Player: ${currentPlayer.name}, ${currentPlayer.icon}`);
     if (currentBoard.checkCell(row, col)) {
         currentBoard.selectCell(row, col, currentPlayer.icon);
-        currentPlayer = (currentPlayer===player1) ? player2 : player1;
+        returnWin(checkWin(row, col, currentPlayer.icon))
         turn++
+        currentPlayer = (currentPlayer===player1) ? player2 : player1;
       }
       else {
         console.error(`Error: ${errorMessage}`)
         return
       }
       displayBoard()
+  }
+
+  function checkWin(row,col,icon) {
+  row -= 1;
+  col -= 1;
+  let board = currentGame.currentBoard.board;
+    if ((board[row]).every((cell) => cell===icon)) {
+      return "row";
+    }
+    if (board.every((row) => row[col] === icon)) {
+      return "column"
+    }
+    if (([(board[0])[0], (board[1])[1], (board[2])[2]]).every((cell) => cell===icon)) {
+      return "cross"
+    }
+    if (([(board[0])[2], (board[1])[1], (board[2])[0]]).every((cell) => cell===icon)) {
+      return "cross"
+    }
+  }
+
+  function returnWin(winCondition) {
+    if (winCondition) gameActive = 0;
+    console.log(gameActive)
+    switch (winCondition) {
+      case "row":
+        console.log(`Row of ${currentPlayer.icon}. ${currentPlayer.name} wins!`)
+        break;
+      case "column":
+        console.log(`Row of ${currentPlayer.icon}. ${currentPlayer.name} wins!`)
+        break;
+      case "cross":
+        console.log(`Diagonal line of ${currentPlayer.icon}. ${currentPlayer.name} wins!`)
+        break;
+    }
   }
 
   let nextChoiceRow;
@@ -117,12 +153,12 @@ function Game() { // factory with game controls, display board
   }
 
   const displayBoard = function() {
-    console.log(currentBoard.board)
+    console.table(currentBoard.board)
   };
   const returnRemaining = function() {
     return currentBoard.getRemainingCells();
   }
-  return { currentBoard, currentPlayer, displayBoard, next, returnRemaining, autoNext }
+  return { currentBoard, displayBoard, next, returnRemaining, autoNext, checkWin, gameActive }
 }
 
 let player1 = createPlayer("bob", "x");
@@ -141,12 +177,21 @@ function playRound() { //uses Game() functions to play a round
       console.log("Tie!")
     }
   }
+
   // currentGame.autoNext()
   return { autoRound }
 }
 playRound().autoRound()
 
 // currentGame.next(1,1)
+// currentGame.next(2,2)
+// currentGame.next(2,1)
+// currentGame.next(1,3)
+// currentGame.next(3,1)
+
+
+
+
 // currentGame.next(2,2)
 // currentGame.next(3,1)
 // currentGame.next(3,2)
@@ -157,9 +202,7 @@ playRound().autoRound()
 // console.log(currentGame.errorMessage)
 // currentGame.currentBoard.checkCell(1,2)
 
-const winRows = [[1,2,3],[4,5,6],[7,8,9]];
-const winCol = [[1,4,7],[2,5,8],[3,6,9]];
-const winCross = [[1,5,9][7,5,3]];
+
 
 
 function boardTest() {
