@@ -79,6 +79,7 @@ function Game() { // factory with game controls, display board
   const currentBoard = Board();
   let currentPlayer = randomizeStart();
   let turn = 1;
+  let winStatus = "";
 
   function randomizeStart() {
     let playerNumber = Math.floor(Math.random()*2)+1;
@@ -89,15 +90,17 @@ function Game() { // factory with game controls, display board
     console.log(`current Player: ${currentPlayer.name}, ${currentPlayer.icon}`);
     if (currentBoard.checkCell(row, col)) {
         currentBoard.selectCell(row, col, currentPlayer.icon);
-        returnWin(checkWin(row, col, currentPlayer.icon))
+        displayBoard()
+        winStatus = checkWin(row, col, currentPlayer.icon)
+        if (winStatus) console.log(returnWin(winStatus))
         turn++
         currentPlayer = (currentPlayer===player1) ? player2 : player1;
       }
       else {
         console.error(`Error: ${errorMessage}`)
+        displayBoard()
         return
       }
-      displayBoard()
   }
 
   function checkWin(row,col,icon) {
@@ -121,13 +124,13 @@ function Game() { // factory with game controls, display board
   function returnWin(winCondition) {
     switch (winCondition) {
       case "row":
-        console.log(`Row of ${currentPlayer.icon}. ${currentPlayer.name} wins!`)
+        return `Row of ${currentPlayer.icon}. ${currentPlayer.name} wins!`
         break;
       case "column":
-        console.log(`Row of ${currentPlayer.icon}. ${currentPlayer.name} wins!`)
+        return `Column of ${currentPlayer.icon}. ${currentPlayer.name} wins!`
         break;
       case "cross":
-        console.log(`Diagonal line of ${currentPlayer.icon}. ${currentPlayer.name} wins!`)
+        return `Diagonal line of ${currentPlayer.icon}. ${currentPlayer.name} wins!`
         break;
     }
   }
@@ -141,7 +144,7 @@ function Game() { // factory with game controls, display board
     let [row, col] = randomFromArr || [0,0];
     nextChoiceRow = row + 1;
     nextChoiceCol = col + 1;
-    console.log(`Random item ${randomFromArr} is selected at index ${randomizer}. Row ${nextChoiceRow} and col ${nextChoiceCol} are returned for .next().`)
+    console.log(`*Random item ${randomFromArr} is selected at index ${randomizer}. Row ${nextChoiceRow} and col ${nextChoiceCol} are returned for .next().*`)
   }
 
   function autoNext() {
@@ -155,7 +158,11 @@ function Game() { // factory with game controls, display board
   const returnRemaining = function() {
     return currentBoard.getRemainingCells();
   }
-  return { currentBoard, displayBoard, next, returnRemaining, autoNext, checkWin }
+
+  const returnWinStatus = function() {
+    return winStatus
+  }
+  return { currentBoard, displayBoard, next, returnRemaining, autoNext, returnWinStatus }
 }
 
 let player1 = createPlayer("bob", "x");
@@ -167,14 +174,14 @@ function playRound() { //uses Game() functions to play a round
   function autoRound() {
     while (numberOfCells > 0) {
       currentGame.autoNext()
-      numberOfCells = currentGame.returnRemaining().length;
+      if (currentGame.returnWinStatus()) numberOfCells = 0;
+      else numberOfCells = currentGame.returnRemaining().length;
       // console.log(numberOfCells)
     }
-    if (numberOfCells===0) {
+    if (numberOfCells===0 && !currentGame.returnWinStatus) {
       console.log("Tie!")
     }
   }
-
   // currentGame.autoNext()
   return { autoRound }
 }
@@ -186,9 +193,6 @@ playRound().autoRound()
 // currentGame.next(1,3)
 // currentGame.next(3,1)
 
-
-
-
 // currentGame.next(2,2)
 // currentGame.next(3,1)
 // currentGame.next(3,2)
@@ -199,19 +203,6 @@ playRound().autoRound()
 // console.log(currentGame.errorMessage)
 // currentGame.currentBoard.checkCell(1,2)
 
-
-
-
-function boardTest() {
-console.log("Test:")
-const board1 = Board()
-board1.selectCell(1,1,"X")
-board1.displayBoard()
-const board2 = Board()
-board2.selectCell(3,1,"O")
-board2.displayBoard()
-
-};
 
 function playerTest() {
   const bob = createPlayer("bob", "x");
