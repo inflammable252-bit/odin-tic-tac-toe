@@ -5,9 +5,8 @@ let currentGame = Game();
 function createPlayer(name, icon) { //factory with player functions
 let score = 0;
 const increaseScore = () => {score++;}
-const decreaseScore = () => {if (score) score--;}
 const getScore = () => score;
-return player = { name, icon, getScore, increaseScore, decreaseScore } 
+return player = { name, icon, getScore, increaseScore } 
 }
 
 function Board() { // factory with functions related to checking and modifying the board
@@ -79,7 +78,7 @@ function Board() { // factory with functions related to checking and modifying t
   return { board, checkCell, selectCell, errorMessage, getRemainingCells }
 }
 
-function Game() { // factory with game controls, retrieve and request interactions with board
+function Game() { // factory with functions to retrieve, request, and interpret interactions with board
   const currentBoard = Board();
   let currentPlayer = randomizeStart();
   let turn = 1;
@@ -96,7 +95,10 @@ function Game() { // factory with game controls, retrieve and request interactio
         currentBoard.selectCell(row, col, currentPlayer.icon);
         displayBoard()
         winStatus = returnWin(checkWin(row, col, currentPlayer.icon))
-        if (winStatus) console.log((winStatus))
+        if (winStatus) {
+          console.log(winStatus)
+          currentPlayer.increaseScore()
+        }
         turn++
         currentPlayer = (currentPlayer===player1) ? player2 : player1;
       }
@@ -183,17 +185,26 @@ function Play() { //uses Game() functions to play a round and display to the DOM
     }
   }
 
+  function displayTotal() {
+   return `${player1.name}, ${player1.icon}: ${player1.getScore()}, ${player2.name}, ${player2.icon}: ${player2.getScore()}`
+  }
+
   function resetGame() {
     currentGame = Game();
   }
-  return { autoRound, resetGame }
+  return { autoRound, resetGame, displayTotal }
 }
 
 Play().autoRound()
+Play().resetGame()
+Play().autoRound()
+console.log(Play().displayTotal())
+
 
 // currentGame.next(1,1)
 // currentGame.next(2,2)
 // currentGame.next(2,1)
+// Play().resetGame()
 // currentGame.next(1,3)
 // currentGame.next(3,1)
 
@@ -208,14 +219,5 @@ Play().autoRound()
 // currentGame.currentBoard.checkCell(1,2)
 
 
-function playerTest() {
-  
-  bob.increaseScore()
-  console.log("Bob's score: " + bob.getScore())
-  rob.decreaseScore()
-  rob.increaseScore()
-  console.log("Rob's score: " + rob.getScore())
-}
-// playerTest()
 
 
