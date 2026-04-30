@@ -1,0 +1,20 @@
+:root {
+    --themeStrong: #444444;
+    --themeMed: #808080;
+    --themeLight: #c5c5c5;
+}
+
+* {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 1px solid black;
+}
+
+body {
+    display: grid;
+    grid-template-columns: [left] 1fr [left-mid] 1fr [right-mid] 1fr [right];
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+main {
+
+}
