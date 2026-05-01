@@ -50,8 +50,7 @@ function Board() { // factory with functions related to checking and modifying t
     [row, col] = toIndex(row, col)
     if ((board[row])[col] === "#") {
       return true
-    }
-    else {
+    }    else {
       this.errorMessage = "Space occupied."
       return false
     }
@@ -97,6 +96,8 @@ function Game() { // factory with functions to retrieve, request, and interpret 
         winStatus = returnWin(checkWin(row, col, currentPlayer.icon))
         if (winStatus) {
           console.log(winStatus)
+          errorMessage = "Game over!"
+          console.log(errorMessage)
           currentPlayer.increaseScore()
         }
         turn++
@@ -167,7 +168,7 @@ function Game() { // factory with functions to retrieve, request, and interpret 
   const returnWinStatus = function() {
     return winStatus
   }
-  return { currentBoard, displayBoard, next, returnRemaining, autoNext, returnWinStatus }
+  return { currentBoard, displayBoard, currentPlayer, next, returnRemaining, autoNext, returnWinStatus }
 }
 
 function Play() { //uses Game() functions to play a round and display to the DOM
@@ -189,15 +190,37 @@ function Play() { //uses Game() functions to play a round and display to the DOM
    return `${player1.name}, ${player1.icon}: ${player1.getScore()}, ${player2.name}, ${player2.icon}: ${player2.getScore()}`
   }
 
+  function checkGameOver() {
+    currentGame.returnWinStatus;
+  }
   function resetGame() {
     currentGame = Game();
   }
-  return { autoRound, resetGame, displayTotal }
+
+  let board = document.querySelector("article.board")
+  let boardNodes = document.querySelectorAll(".cell");
+
+  function initializeBoard() {
+    console.log(board)
+  }
+
+  function markCell(nodeRow, nodeCol) {
+    let row = nodeRow + 1;
+    let col = nodeCol + 1;
+    currentGame.next(row,col)
+  }
+
+  return { autoRound, resetGame, displayTotal, initializeBoard, markCell }
 }
 
-Play().autoRound()
-Play().resetGame()
-Play().autoRound()
+
+
+// Play().autoRound()
+// Play().resetGame()
+// Play().autoRound()
+console.log(currentGame.currentPlayer.icon)
+Play().initializeBoard();
+// Play().markCell(0,0);
 console.log(Play().displayTotal())
 
 
