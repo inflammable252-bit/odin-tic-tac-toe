@@ -1,5 +1,4 @@
 
-
 :root {
     --themeStrong: #444444;
     --themeMed: #808080;
@@ -13,17 +12,15 @@
 body {
     height: 100vh;
     display: grid;
-    grid-template-columns: [left-start] 0.2fr [left-end] 1.2fr [right-start] 0.2fr [right-end];
-    grid-template-rows: [top-start] 0.2fr [top-end] 1.2fr [bottom-start] 0.2fr [bottom-end];
+    grid-template-columns: [left-start] 0.3fr [left-end] auto [right-start] 0.3fr [right-end];
+    grid-template-rows: [top-start] 0.2fr [top-end] auto [bottom-start] 0.4fr [bottom-end];
 }
 
 main {
     grid-column: left-end / right-start;
     grid-row: top-end / bottom-start;
 }
-/* main.center {
-    display: flex;
-} */
+
 
 div.center-wrapper {
     height: 100%;
@@ -31,7 +28,7 @@ div.center-wrapper {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: max(1.5rem, 2.5vw);
+    gap: 1vw;
 }
 
 article.board {
@@ -69,24 +66,23 @@ p.error-msg {
 }
 
 nav {
-    height: 4em;
+    height: max(4em, content);
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 5vw;
 }
 
 @media (max-width: 768px) {
     nav {
-        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        gap: 1rem;
     }
 }
 
 nav article.score-display {
-    padding: 1rem 2rem;
-    min-width: content;
-    height: 100%;
+    padding: 2px 5px;
     background-color: #0000003d;
     border-radius: 8px;
     display: flex;
