@@ -201,32 +201,48 @@ function Play() { //uses Game() functions to play a round and display to the DOM
   let boardNodes = document.querySelectorAll(".cell");
 
   function initializeBoard() {
-    console.log(board)
   }
-
+  
   function markCell(nodeRow, nodeCol) {
     let row = nodeRow + 1;
     let col = nodeCol + 1;
     currentGame.next(row,col)
   }
+  
+  function updateBoard() {
+    let board = currentGame.currentBoard.board;
+    let nodeCount = 0;
+    for (let row=0; row<3; row++) {
+      for (let cell=0; cell<3; cell++) {
+        let boardCoord = (board[row])[cell]
+        boardNodes[nodeCount].textContent = "";
+        (boardCoord === "x") && boardNodes[nodeCount].classList.toggle("selected1");
+        (boardCoord === "o") && boardNodes[nodeCount].classList.toggle("selected2");
+        nodeCount++
+      }
+    }
+  }
 
-  return { autoRound, resetGame, displayTotal, initializeBoard, markCell }
+  return { autoRound, resetGame, displayTotal, initializeBoard, markCell, updateBoard }
 }
 
 
 
 // Play().autoRound()
 // Play().resetGame()
-// Play().autoRound()
 console.log(currentGame.currentPlayer.icon)
-Play().initializeBoard();
+// Play().initializeBoard();
+// Play().autoRound()
+currentGame.next(1,1)
+currentGame.next(1,2)
+currentGame.next(1,3)
+currentGame.next(2,1)
+Play().updateBoard()
 // Play().markCell(0,0);
 console.log(Play().displayTotal())
 
 
-// currentGame.next(1,1)
-// currentGame.next(2,2)
-// currentGame.next(2,1)
+
 // Play().resetGame()
 // currentGame.next(1,3)
 // currentGame.next(3,1)
