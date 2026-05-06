@@ -4,8 +4,8 @@
     --themeMed: #808080;
     --themeLight: #c5c5c5;
 
-    --player1icon: url("./circle-svgrepo-com.svg");
-    --player2icon: url("./cross-svgrepo-com.svg");
+    --player1icon: url("./cross-svgrepo-com.svg");
+    --player2icon: url("./circle-svgrepo-com.svg");
 }
 
 * {
@@ -79,7 +79,7 @@ article div.cell.selected2::before {
 
 article div.cell:hover {
     /* border: none; */
-    transition: 0.3s scale ease-in-out;
+    transition: 0.3s scale;
     border: 3px solid #FFF;
     scale: 1.1;
     z-index: 5;
@@ -88,15 +88,22 @@ article div.cell:hover {
 article div.cell:active {
     border-color: green;
     transform: rotate(360deg);
-    transition: 0.1s transform ease-in-out;
+    transition: 0.15s transform ease-in-out;
 }
+
+
 article div.cell.selected1:active, article div.cell.selected2:active {
     border-color: red;
     transform: none;
-} 
+}
+article div.cell.selected1:hover, article div.cell.selected2:hover {
+    scale: 1.05;
+}
 
-p.error-msg {
-    display: none;
+p.system-msg {
+    /* display: none; */
+    color: red;
+    font-size: 1.2rem;
 }
 
 nav {

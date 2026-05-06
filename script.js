@@ -51,7 +51,7 @@ function Board() { // factory with functions related to checking and modifying t
     if ((board[row])[col] === "#") {
       return true
     }    else {
-      this.errorMessage = "Space occupied."
+      this.errorMessage = `Space occupied: Row ${row+1}, Column ${col+1}`
       return false
     }
   }
@@ -73,8 +73,10 @@ function Board() { // factory with functions related to checking and modifying t
     }
     return remainingIndices
   }
-
-  return { board, checkCell, selectCell, errorMessage, getRemainingCells }
+  const getError = function() {
+    return errorMessage
+  }
+  return { board, checkCell, selectCell, errorMessage, getError, getRemainingCells }
 }
 
 function Game() { // factory with functions to retrieve, request, and interpret interactions with board
@@ -168,6 +170,7 @@ function Game() { // factory with functions to retrieve, request, and interpret 
   const returnWinStatus = function() {
     return winStatus
   }
+
   return { currentBoard, displayBoard, currentPlayer, next, returnRemaining, autoNext, returnWinStatus }
 }
 
@@ -184,29 +187,50 @@ function Play() { //uses Game() functions to play a round and display to the DOM
     if (numberOfCells===0 && !currentGame.returnWinStatus()) {
       console.log("Tie!")
     }
+    updateBoard()
   }
 
   function displayTotal() {
    return `${player1.name}, ${player1.icon}: ${player1.getScore()}, ${player2.name}, ${player2.icon}: ${player2.getScore()}`
   }
-
   function checkGameOver() {
     currentGame.returnWinStatus;
   }
-  function resetGame() {
+  function newRound() {
     currentGame = Game();
+    updateBoard()
+    currentGame.displayBoard()
   }
 
   let board = document.querySelector("article.board")
   let boardNodes = document.querySelectorAll(".cell");
+  board.addEventListener("click", (e) => {
+    if (currentGame.returnWinStatus()) {
+      return;
+    }
+    let nodeIndex = Array.from(boardNodes).indexOf(e.target);
+    markCell(nodeIndex);
+    updateBoard();
+  })
 
-  function initializeBoard() {
-  }
-  
-  function markCell(nodeRow, nodeCol) {
+  const gameButtons = document.querySelector("div.button-wrapper")
+
+  gameButtons.addEventListener("click", (e) => {
+    (e.target.id==="round") && newRound()
+
+  })
+
+  function markCell(node) {
+    let nodeRow = 0;
+    let nodeCol = node;
+    (node <= 2) && (nodeRow = 0);
+    (node >= 3 && node <= 5) && ((nodeRow = 1) && (nodeCol -= 3));
+    (node >= 6) && ((nodeRow = 2) && (nodeCol -= 6));
+    // console.log("node: " + node + ", row: " + nodeRow + ", col: " + nodeCol)
     let row = nodeRow + 1;
     let col = nodeCol + 1;
-    currentGame.next(row,col)
+    currentGame.next(row, col)
+    // console.log("*after* node: " + node + ", row: " + row + ", col: " + col)
   }
   
   function updateBoard() {
@@ -216,30 +240,43 @@ function Play() { //uses Game() functions to play a round and display to the DOM
       for (let cell=0; cell<3; cell++) {
         let boardCoord = (board[row])[cell]
         boardNodes[nodeCount].textContent = "";
-        (boardCoord === "x") && boardNodes[nodeCount].classList.toggle("selected1");
-        (boardCoord === "o") && boardNodes[nodeCount].classList.toggle("selected2");
+        (boardCoord === "x") && boardNodes[nodeCount].classList.add("selected1");
+        (boardCoord === "o") && boardNodes[nodeCount].classList.add("selected2");
+        (boardCoord === "#") && (boardNodes[nodeCount].classList.remove("selected1", "selected2"))
         nodeCount++
       }
     }
+    updateMsg()
+    updateScore()
   }
 
-  return { autoRound, resetGame, displayTotal, initializeBoard, markCell, updateBoard }
-}
+  function updateMsg() {
+    const message = document.querySelector("p.system-msg")
+    message.textContent = currentGame.returnWinStatus() || currentGame.currentBoard.error;
+  }
+  function updateScore() {
+    const p1Score = document.getElementById("p1-score");
+    const p2Score = document.getElementById("p2-score");
+    p1Score.textContent = player1.getScore();
+    p2Score.textContent = player2.getScore();
+  }
 
+  return { autoRound, displayTotal, markCell, updateBoard }
+};
 
+// console.log(currentGame.currentPlayer.icon)
+Play()
+// currentGame.next(1,1)
 
-// Play().autoRound()
-// Play().resetGame()
-console.log(currentGame.currentPlayer.icon)
-// Play().initializeBoard();
-// Play().autoRound()
-currentGame.next(1,1)
-currentGame.next(1,2)
-currentGame.next(1,3)
-currentGame.next(2,1)
-Play().updateBoard()
+// Play().updateBoard()
 // Play().markCell(0,0);
-console.log(Play().displayTotal())
+// Play().markCell(0)
+// Play().markCell(1)
+// Play().markCell(2)
+// Play().markCell(3)
+// Play().markCell(4)
+// Play().markCell(1)
+// console.log(Play().displayTotal())
 
 
 
