@@ -40,12 +40,14 @@ article.board {
 
     height: var(--board-size);
     width: var(--board-size);
+    box-shadow: 8px 8px 12px 6px #1b1b1ba8;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     border-radius: 16px;
     outline: 12px solid var(--themeStrong);
     background-color: var(--themeStrong);
+
 
     .cell:first-child {
         border-radius: var(--corner) 0 0 0;
@@ -143,6 +145,7 @@ nav article.score-display {
     padding: 5px 15px 5px 15px;
     background-color: #0000003d;
     border-radius: 8px;
+    box-shadow: 4px 4px 5px -1px #47474771;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -210,5 +213,5 @@ nav button:hover, nav button:active {
 nav button:active {
     scale: 90%;
     box-shadow: none;
-    transition: 0.2s box-shadow;
+    transition: 0.3s box-shadow;
 }
