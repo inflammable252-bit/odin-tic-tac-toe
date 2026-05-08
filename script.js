@@ -203,7 +203,7 @@ function Play() { //uses Game() functions to play a round and display to the DOM
    return `${player1.name}, ${player1.icon}: ${player1.getScore()}, ${player2.name}, ${player2.icon}: ${player2.getScore()}`
   }
   function checkGameOver() {
-    currentGame.returnWinStatus;
+    return currentGame.returnWinStatus();
   }
   function newRound() {
     currentGame = Game();
@@ -214,7 +214,7 @@ function Play() { //uses Game() functions to play a round and display to the DOM
   let board = document.querySelector("article.board")
   let boardNodes = document.querySelectorAll(".cell");
   board.addEventListener("click", (e) => {
-    if (currentGame.returnWinStatus()) {
+    if (checkGameOver()) {
       return;
     }
     let nodeIndex = Array.from(boardNodes).indexOf(e.target);
@@ -225,7 +225,11 @@ function Play() { //uses Game() functions to play a round and display to the DOM
   const gameButtons = document.querySelector("div.button-wrapper")
 
   gameButtons.addEventListener("click", (e) => {
-    (e.target.id==="round") && newRound()
+    if (e.target.id==="round") {
+      (e.target.classList.contains("off")) && (currentGame.currentBoard.setError("Complete the current round first!"));
+      currentGame.returnWinStatus() && newRound();
+      updateMsg()
+    }
 
   })
 
@@ -255,13 +259,29 @@ function Play() { //uses Game() functions to play a round and display to the DOM
         nodeCount++
       }
     }
+    (checkGameOver() && updateRoundButton("on"));
+    ((!checkGameOver()) && updateRoundButton("off"))
     updateMsg()
     updateScore()
   }
 
+  const message = document.querySelector("p.system-msg")
   function updateMsg() {
-    const message = document.querySelector("p.system-msg")
-    message.textContent = currentGame.returnWinStatus() || currentGame.currentBoard.error;
+    message.textContent = currentGame.returnWinStatus() || currentGame.currentBoard.getError()
+  }
+  function clearMsg() {
+    message.textContent = "";
+  }
+  function updateRoundButton(set) {
+    const roundButton = document.getElementById("round");
+    switch (set) {
+      case "off":
+        roundButton.classList.add("off");
+        break;
+      case "on":
+        roundButton.classList.remove("off");
+        break;
+    }
   }
   function updateScore() {
     const p1Score = document.getElementById("p1-score");
