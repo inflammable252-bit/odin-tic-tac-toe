@@ -24,10 +24,14 @@
             <p class="system-msg"></p>
             <nav>
                 <article class="score-display">
-                    <p id="p1">player1<span>:</span>
-                    <span id="p1-score">0</span></p>
-                    <p id="p2">player2<span>:</span>
-                    <span id="p2-score">0</span></p>
+                    <div class="p-wrapper">
+                        <img id="p1-icon" src="./cross-svgrepo-com.svg" alt="Player 1 icon: X">
+                        <p id="p1"><span id="name">player1</span><span>:</span>
+                        <span id="p1-score">0</span></p>
+                        <img id="p2-icon" src="circle-svgrepo-com.svg" alt="Player 2 icon: O">
+                        <p id="p2"><span id="name">player2</span><span>:</span>
+                        <span id="p2-score">0</span></p>
+                    </div>
                     <button id="edit">Edit players</button>
                 </article>
                 <div class="button-wrapper">

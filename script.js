@@ -1,4 +1,4 @@
-let player1 = createPlayer("Bob", "X");
+let player1 = createPlayer("1234567890", "X");
 let player2 = createPlayer("Rob", "O");
 let currentGame = Game();
 
@@ -291,8 +291,13 @@ function Play() { //uses Game() functions to play a round and display to the DOM
   }
   
   function updateScore() {
+    const p1 = document.querySelector("p#p1 > span");
+    const p2 = document.querySelector("p#p2 > span");
     const p1Score = document.getElementById("p1-score");
     const p2Score = document.getElementById("p2-score");
+    console.log(p1)
+    p1.textContent = player1.name;
+    p2.textContent = player2.name;
     p1Score.textContent = player1.getScore();
     p2Score.textContent = player2.getScore();
   }
