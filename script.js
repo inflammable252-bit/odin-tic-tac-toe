@@ -103,7 +103,7 @@ function Game() { // factory with functions to retrieve, request, and interpret 
           console.log(winStatus);
           currentBoard.setError("Start a new round!");
           console.log(currentBoard.getError());
-          currentPlayer.increaseScore()
+          winStatus !== "Tie!" && currentPlayer.increaseScore()
         }
         turn++
         currentPlayer = (currentPlayer===player1) ? player2 : player1;
@@ -233,6 +233,10 @@ function Play() { //uses Game() functions to play a round and display to the DOM
 
   })
 
+  function restartGameButton() {
+    
+  }
+  
   function markCell(node) {
     let nodeRow = 0;
     let nodeCol = node;
@@ -277,12 +281,15 @@ function Play() { //uses Game() functions to play a round and display to the DOM
     switch (set) {
       case "off":
         roundButton.classList.add("off");
+        roundButton.textContent = "Round in progress..."
         break;
       case "on":
         roundButton.classList.remove("off");
+        roundButton.textContent = "New Round"
         break;
     }
   }
+  
   function updateScore() {
     const p1Score = document.getElementById("p1-score");
     const p2Score = document.getElementById("p2-score");

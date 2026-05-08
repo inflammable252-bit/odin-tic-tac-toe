@@ -3,6 +3,8 @@
     --themeStrong: #444444;
     --themeMed: #808080;
     --themeLight: #c5c5c5;
+    --themeO: rgb(161, 70, 157);
+    --themeX: #413a83;
 
     --player1icon: url("./cross-svgrepo-com.svg");
     --player2icon: url("./circle-svgrepo-com.svg");
@@ -35,11 +37,12 @@ div.center-wrapper {
 }
 
 article.board {
-    --board-size: clamp(35vh, 35vw, 45vh);
+    --board-size: clamp(250px, 40vw, 40vh);
     --corner: 16px;
 
     height: var(--board-size);
     width: var(--board-size);
+    margin-bottom: 1vh;
     box-shadow: 8px 8px 12px 6px #1b1b1ba8;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -47,7 +50,6 @@ article.board {
     border-radius: 16px;
     outline: 12px solid var(--themeStrong);
     background-color: var(--themeStrong);
-
 
     .cell:first-child {
         border-radius: var(--corner) 0 0 0;
@@ -71,13 +73,11 @@ article div.cell {
     border: 1px solid black;
     position: relative;
 }
-
-
 article div.cell.selected1 {
-    background-color: rgb(151, 151, 255);
+    background-color: var(--themeX);
 }
 article div.cell.selected2 {
-    background-color: rgb(255, 209, 209);
+    background-color: var(--themeO);
 }
 article div.cell.selected1::before, article div.cell.selected2::before {
     content: "";
@@ -127,12 +127,12 @@ p.system-msg {
 }
 
 nav {
-    height: max(4em, content);
+    height: min-content;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5vw;
+    gap: clamp(1rem, 4vw, 3rem);
 }
 
 @media (max-width: 768px) {
@@ -168,17 +168,18 @@ nav article.score-display {
         background-position: center;
         background-attachment: local;
         border-radius: 100%;
-        background-color: black;
         position: relative;
         left: -1.6em;
-        top: 1.6em;
+        top: 1.5em;
         margin-top: -1.6em;
     }
 
     p#p1::before {
+        background-color: var(--themeX);
         background-image: var(--player1icon);
     }
     p#p2::before {
+        background-color: var(--themeO);
         background-image: var(--player2icon);
     }
 
@@ -225,10 +226,11 @@ nav button#round {
 
 nav button#round.off {
     color: black;
-    background-color: var(--themeLight);
+    background-color: var(--themeMed);
+    opacity: 0.5;
     box-shadow: none;
     border: none;
-    transform: rotate(360deg);
+    transform: rotate(-360deg);
 }
 nav button#round.off:active {
     box-shadow: none;
