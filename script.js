@@ -1,5 +1,5 @@
-let player1 = createPlayer("bob", "x");
-let player2 = createPlayer("rob", "o");
+let player1 = createPlayer("Bob", "X");
+let player2 = createPlayer("Rob", "O");
 let currentGame = Game();
 
 function createPlayer(name, icon) { //factory with player functions
@@ -51,7 +51,7 @@ function Board() { // factory with functions related to checking and modifying t
     if ((board[row])[col] === "#") {
       return true
     }    else {
-      this.errorMessage = `Space occupied: Row ${row+1}, Column ${col+1}`
+      setError(`Space occupied: Row ${row+1}, Column ${col+1}`);
       return false
     }
   }
@@ -73,10 +73,13 @@ function Board() { // factory with functions related to checking and modifying t
     }
     return remainingIndices
   }
+  function setError(error) {
+    errorMessage = error
+  }
   const getError = function() {
     return errorMessage
   }
-  return { board, checkCell, selectCell, errorMessage, getError, getRemainingCells }
+  return { board, checkCell, selectCell, setError, getError, getRemainingCells }
 }
 
 function Game() { // factory with functions to retrieve, request, and interpret interactions with board
@@ -97,16 +100,16 @@ function Game() { // factory with functions to retrieve, request, and interpret 
         displayBoard()
         winStatus = returnWin(checkWin(row, col, currentPlayer.icon))
         if (winStatus) {
-          console.log(winStatus)
-          errorMessage = "Game over!"
-          console.log(errorMessage)
+          console.log(winStatus);
+          currentBoard.setError("Game over!");
+          console.log(currentBoard.getError());
           currentPlayer.increaseScore()
         }
         turn++
         currentPlayer = (currentPlayer===player1) ? player2 : player1;
       }
       else {
-        console.error(`Error: ${errorMessage}`)
+        console.error(currentBoard.getError())
         displayBoard()
         return
       }
@@ -128,6 +131,9 @@ function Game() { // factory with functions to retrieve, request, and interpret 
     if (([(board[0])[2], (board[1])[1], (board[2])[0]]).every((cell) => cell===icon)) {
       return "cross"
     }
+    if ((currentGame.returnRemaining().length===0)) {
+      return "tie"
+    }
   }
 
   function returnWin(winCondition) {
@@ -141,6 +147,8 @@ function Game() { // factory with functions to retrieve, request, and interpret 
       case "cross":
         return `Diagonal line of ${currentPlayer.icon}. ${currentPlayer.name} wins!`
         break;
+      case "tie":
+        return `Tie!`
     }
   }
 
@@ -185,7 +193,8 @@ function Play() { //uses Game() functions to play a round and display to the DOM
       }
       // console.log(numberOfCells)
     if (numberOfCells===0 && !currentGame.returnWinStatus()) {
-      console.log("Tie!")
+      currentGame.currentBoard.errorMessage = "Error: Start new round."
+      console.log(currentGame.currentBoard.getError())
     }
     updateBoard()
   }
@@ -240,8 +249,8 @@ function Play() { //uses Game() functions to play a round and display to the DOM
       for (let cell=0; cell<3; cell++) {
         let boardCoord = (board[row])[cell]
         boardNodes[nodeCount].textContent = "";
-        (boardCoord === "x") && boardNodes[nodeCount].classList.add("selected1");
-        (boardCoord === "o") && boardNodes[nodeCount].classList.add("selected2");
+        (boardCoord === "X") && boardNodes[nodeCount].classList.add("selected1");
+        (boardCoord === "O") && boardNodes[nodeCount].classList.add("selected2");
         (boardCoord === "#") && (boardNodes[nodeCount].classList.remove("selected1", "selected2"))
         nodeCount++
       }
@@ -265,7 +274,7 @@ function Play() { //uses Game() functions to play a round and display to the DOM
 };
 
 // console.log(currentGame.currentPlayer.icon)
-Play()
+Play().autoRound()
 // currentGame.next(1,1)
 
 // Play().updateBoard()
@@ -276,24 +285,6 @@ Play()
 // Play().markCell(3)
 // Play().markCell(4)
 // Play().markCell(1)
-// console.log(Play().displayTotal())
-
-
-
-// Play().resetGame()
-// currentGame.next(1,3)
-// currentGame.next(3,1)
-
-// currentGame.next(2,2)
-// currentGame.next(3,1)
-// currentGame.next(3,2)
-// currentGame.next(3,3)
-// console.log("Remaining:")
-// console.log(currentGame.returnRemaining())
-// currentGame.autoNext()
-// console.log(currentGame.errorMessage)
-// currentGame.currentBoard.checkCell(1,2)
-
 
 
 
