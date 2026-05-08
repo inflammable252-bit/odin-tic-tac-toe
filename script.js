@@ -101,7 +101,7 @@ function Game() { // factory with functions to retrieve, request, and interpret 
         winStatus = returnWin(checkWin(row, col, currentPlayer.icon))
         if (winStatus) {
           console.log(winStatus);
-          currentBoard.setError("Game over!");
+          currentBoard.setError("Start a new round!");
           console.log(currentBoard.getError());
           currentPlayer.increaseScore()
         }
@@ -186,16 +186,16 @@ function Play() { //uses Game() functions to play a round and display to the DOM
   let numberOfCells = currentGame.returnRemaining().length;
 
   function autoRound() {
+    if (currentGame.returnWinStatus()) {
+      currentGame.currentBoard.setError("Start a new round!");
+      console.log(currentGame.currentBoard.getError());
+    }
     while (numberOfCells > 0) {
       currentGame.autoNext()
       if (currentGame.returnWinStatus()) numberOfCells = 0;
       else numberOfCells = currentGame.returnRemaining().length;
       }
       // console.log(numberOfCells)
-    if (numberOfCells===0 && !currentGame.returnWinStatus()) {
-      currentGame.currentBoard.errorMessage = "Error: Start new round."
-      console.log(currentGame.currentBoard.getError())
-    }
     updateBoard()
   }
 
