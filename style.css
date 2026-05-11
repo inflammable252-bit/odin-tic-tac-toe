@@ -33,7 +33,7 @@ div.center-wrapper {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.5rem, 4vw, 1rem);
 }
 
 article.board {
@@ -122,7 +122,7 @@ article div.cell.selected1:hover, article div.cell.selected2:hover {
 p.system-msg {
     /* display: none; */
     color: green;
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
     font-weight: 600;
 }
 
@@ -203,7 +203,7 @@ nav button {
     box-shadow: 2px 2px 4px 0px #47474794;
 }
 
-nav button:hover, nav button:active, nav button#round.off {
+nav button:hover, nav button:active, nav button.off {
     scale: 97%;
     position: relative;
     top: 1px;
@@ -215,7 +215,10 @@ nav button:active {
     box-shadow: none;
     transition: 0.3s box-shadow;
 }
-
+nav div#game-edit {
+    display: flex;
+    gap: clamp(3px, 0.6vw, 1rem);
+}
 nav button#round {
     border: 3px solid green;
     transition: 0.4s;
@@ -229,6 +232,12 @@ nav button#round.off {
     border: none;
     transform: rotate(-360deg);
 }
-nav button#round.off:active {
+nav button.off:active {
     box-shadow: none;
+}
+
+nav button.confirm {
+    scale: 1.05;
+    transition: 0.2s;
+    border: 3px solid red;
 }

@@ -1,12 +1,13 @@
-let player1 = createPlayer("1234567890", "X");
-let player2 = createPlayer("Rob", "O");
+let player1 = createPlayer("Player 1", "X");
+let player2 = createPlayer("Player 2", "O");
 let currentGame = Game();
 
 function createPlayer(name, icon) { //factory with player functions
 let score = 0;
 const increaseScore = () => {score++;}
 const getScore = () => score;
-return player = { name, icon, getScore, increaseScore } 
+const resetScore = () => score = 0;
+return player = { name, icon, getScore, increaseScore, resetScore } 
 }
 
 function Board() { // factory with functions related to checking and modifying the board
@@ -165,6 +166,9 @@ function Game() { // factory with functions to retrieve, request, and interpret 
   }
 
   function autoNext() {
+    if ((winStatus) || returnRemaining().length === 0) {
+      return
+    }
     getRandomChoice()
     next(nextChoiceRow,nextChoiceCol)
   }
@@ -184,7 +188,6 @@ function Game() { // factory with functions to retrieve, request, and interpret 
 
 function Play() { //uses Game() functions to play a round and display to the DOM
   let numberOfCells = currentGame.returnRemaining().length;
-
   function autoRound() {
     if (currentGame.returnWinStatus()) {
       currentGame.currentBoard.setError("Start a new round!");
@@ -210,6 +213,19 @@ function Play() { //uses Game() functions to play a round and display to the DOM
     updateBoard()
     currentGame.displayBoard()
   }
+function restartGame() {
+    player1.resetScore();
+    player2.resetScore();
+    currentGame.currentBoard = Board();
+    newRound();
+  }
+  const message = document.querySelector("p.system-msg")
+  function updateMsg() {
+    message.textContent = currentGame.returnWinStatus() || currentGame.currentBoard.getError()
+  }
+  function clearMsg() {
+    message.textContent = "";
+  }
 
   let board = document.querySelector("article.board")
   let boardNodes = document.querySelectorAll(".cell");
@@ -227,16 +243,23 @@ function Play() { //uses Game() functions to play a round and display to the DOM
   gameButtons.addEventListener("click", (e) => {
     if (e.target.id==="round") {
       (e.target.classList.contains("off")) && (currentGame.currentBoard.setError("Complete the current round first!"));
-      currentGame.returnWinStatus() && newRound();
+      (checkGameOver()) && newRound();
       updateMsg()
     }
-
+    if (e.target.id==="restart") {
+      confirmRestart()
+    }
+    else toggleRestartOff();
+    if (e.target.id==="auto-move") {
+      if (checkGameOver()) {
+        message.textContent = "Start a new round!"; // updateMsg() not used because it prioritizes win status
+      }
+      else {
+        currentGame.autoNext();
+        updateBoard()
+      }
+    }
   })
-
-  function restartGameButton() {
-    
-  }
-  
   function markCell(node) {
     let nodeRow = 0;
     let nodeCol = node;
@@ -246,8 +269,12 @@ function Play() { //uses Game() functions to play a round and display to the DOM
     // console.log("node: " + node + ", row: " + nodeRow + ", col: " + nodeCol)
     let row = nodeRow + 1;
     let col = nodeCol + 1;
-    currentGame.next(row, col)
+    currentGame.next(row, col);
     // console.log("*after* node: " + node + ", row: " + row + ", col: " + col)
+    if (!checkGameOver() && currentGame.currentBoard.getError()) {
+      currentGame.currentBoard.setError("");
+      updateMsg()
+    }
   }
   
   function updateBoard() {
@@ -263,18 +290,16 @@ function Play() { //uses Game() functions to play a round and display to the DOM
         nodeCount++
       }
     }
-    (checkGameOver() && updateRoundButton("on"));
-    ((!checkGameOver()) && updateRoundButton("off"))
+    if (checkGameOver()) {
+      updateRoundButton("on");
+      updateAutoButton("off")
+      }
+    if (!checkGameOver()) {
+      updateRoundButton("off");
+      updateAutoButton("on")
+      }
     updateMsg()
     updateScore()
-  }
-
-  const message = document.querySelector("p.system-msg")
-  function updateMsg() {
-    message.textContent = currentGame.returnWinStatus() || currentGame.currentBoard.getError()
-  }
-  function clearMsg() {
-    message.textContent = "";
   }
   function updateRoundButton(set) {
     const roundButton = document.getElementById("round");
@@ -289,19 +314,43 @@ function Play() { //uses Game() functions to play a round and display to the DOM
         break;
     }
   }
-  
+  function updateAutoButton(set) {
+    const autoButton = document.getElementById("auto-move");
+    switch (set) {
+      case "off":
+        autoButton.classList.add("off");
+        break;
+      case "on":
+        autoButton.classList.remove("off");
+        break;
+    }
+  }
+  const restartButton = document.getElementById("restart");
+  function confirmRestart() {
+    if (restartButton.classList.contains("confirm")) {
+      toggleRestartOff();
+      restartGame()
+    }
+    else {
+      message.textContent = "Click again to confirm."
+      restartButton.classList.add("confirm");
+      restartButton.textContent = "Confirm Restart"
+    }
+  }
+  function toggleRestartOff() {
+    restartButton.textContent = "Restart"
+    restartButton.classList.remove("confirm");
+  }
   function updateScore() {
     const p1 = document.querySelector("p#p1 > span");
     const p2 = document.querySelector("p#p2 > span");
     const p1Score = document.getElementById("p1-score");
     const p2Score = document.getElementById("p2-score");
-    console.log(p1)
     p1.textContent = player1.name;
     p2.textContent = player2.name;
     p1Score.textContent = player1.getScore();
     p2Score.textContent = player2.getScore();
   }
-
   return { autoRound, displayTotal, markCell, updateBoard }
 };
 
