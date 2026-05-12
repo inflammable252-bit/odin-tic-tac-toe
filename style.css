@@ -1,10 +1,10 @@
 
 :root {
-    --themeStrong: #444444;
-    --themeMed: #808080;
-    --themeLight: #c5c5c5;
-    --themeO: rgb(161, 70, 157);
-    --themeX: #413a83;
+    --themeStrong: #333333;
+    --themeOff: #27243d;
+    --themeMed: #27203894;
+    --themeO: rgba(221, 56, 213, 0.76);
+    --themeX: #3b2bc7a8;
 
     --player1icon: url("./cross-svgrepo-com.svg");
     --player2icon: url("./circle-svgrepo-com.svg");
@@ -19,6 +19,8 @@ body {
     display: grid;
     grid-template-columns: [left-start] 0.3fr [left-end] auto [right-start] 0.3fr [right-end];
     grid-template-rows: [top-start] 0.2fr [top-end] auto [bottom-start] 0.4fr [bottom-end];
+    background-color: var(--themeStrong);
+    color: #FFF;
 }
 
 main {
@@ -37,7 +39,7 @@ div.center-wrapper {
 }
 
 article.board {
-    --board-size: clamp(250px, 40vw, 40vh);
+    --board-size: clamp(250px, 45vw, 45vh);
     --corner: 16px;
 
     height: var(--board-size);
@@ -48,8 +50,9 @@ article.board {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     border-radius: 16px;
-    outline: 12px solid var(--themeStrong);
-    background-color: var(--themeStrong);
+    padding: 12px;
+    background: #ff9500;
+    background: linear-gradient(51deg, rgba(255, 149, 0, 1) 4%, rgba(199, 87, 197, 1) 24%, rgba(0, 238, 255, 1) 71%, rgba(250, 127, 225, 0.88) 88%);
 
     .cell:first-child {
         border-radius: var(--corner) 0 0 0;
@@ -67,17 +70,23 @@ article.board {
 
 article div.cell {
     color: #ffffff00;
-    background-color: var(--themeLight);
+    background-color: #181818d5;
     min-height: 30px;
     width: auto;
-    border: 1px solid black;
+    margin: 1px;
     position: relative;
+    background-attachment: fixed;
 }
-article div.cell.selected1 {
+article.div.cell.selected1, article.div.cell.selected2 {
+    background: #181818d5;
+}
+main.center article div.cell.selected1 {
     background-color: var(--themeX);
+    box-shadow: 0 0 11px 2px rgb(139, 126, 255);
 }
-article div.cell.selected2 {
+main.center article div.cell.selected2 {
     background-color: var(--themeO);
+    box-shadow: 0 0 11px 2px rgb(255 128 249);
 }
 article div.cell.selected1::before, article div.cell.selected2::before {
     content: "";
@@ -97,21 +106,22 @@ article div.cell.selected2::before {
     background-image: var(--player2icon);
 }
 
-article div.cell:hover {
+div.center-wrapper article div.cell:hover {
     /* border: none; */
     transition: 0.3s scale;
     border: 3px solid #FFF;
+    border-radius: var(--corner);
     scale: 1.1;
     z-index: 5;
 }
 
-article div.cell:active {
-    border-color: green;
+main.center article div.cell:active {
+    border-color: rgba(72, 255, 0, 0.925);
     transform: rotate(360deg);
     transition: 0.15s transform ease-in-out;
 }
 
-article div.cell.selected1:active, article div.cell.selected2:active {
+main.center article div.cell.selected1:active, main.center article div.cell.selected2:active {
     border-color: red;
     transform: none;
 }
@@ -121,9 +131,10 @@ article div.cell.selected1:hover, article div.cell.selected2:hover {
 
 p.system-msg {
     /* display: none; */
-    color: green;
+    color: rgb(0, 238, 255);
     font-size: clamp(1rem, 2vw, 1.2rem);
     font-weight: 600;
+    letter-spacing: 1px;
 }
 
 nav {
@@ -132,7 +143,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: clamp(1rem, 4vw, 3rem);
+    gap: clamp(1rem, 3vw, 2rem);
 }
 
 @media (max-width: 768px) {
@@ -189,20 +200,22 @@ nav article.score-display {
 nav div.button-wrapper {
     display: flex;
     flex-direction: column;
-    gap: min(0.9rem, 0.7vw);
+    gap: min(1rem, 1vw);
 }
 
 nav button {
     font-size: 0.8rem;
-    border: 3px solid #ffffff00;
+    border: 1px solid #ffffff7c;
     border-radius: 16px;
     padding: 0.5em 1.5em;
     color: white;
-    background-color: var(--themeStrong);
+    background-color: var(--themeMed);
     transition: 0.3s scale;
-    box-shadow: 2px 2px 4px 0px #47474794;
+    box-shadow: 1px 1px 2px 0px #ffffff;
 }
-
+nav button#auto-move {
+    
+}
 nav button:hover, nav button:active, nav button.off {
     scale: 97%;
     position: relative;
@@ -217,15 +230,15 @@ nav button:active {
 }
 nav div#game-edit {
     display: flex;
-    gap: clamp(3px, 0.6vw, 1rem);
+    gap: clamp(3px, 0.7vw, 1rem);
 }
 nav button#round {
-    border: 3px solid rgba(85, 175, 85, 0.692);
+    border: 2px solid rgba(133, 255, 133, 0.692);
     transition: 0.4s;
+    box-shadow: 1px 1px 4px 0px rgba(204, 255, 204, 0.74);
 }
-nav button#round.off {
-    color: black;
-    background-color: var(--themeMed);
+nav button#round.off, .off {
+    background-color: var(--themeOff);
     opacity: 0.5;
     box-shadow: none;
     border: none;
@@ -236,8 +249,9 @@ nav button.off:active {
 }
 nav button.confirm {
     scale: 1.05;
-    transition: 0.3s;
-    border: 3px solid rgba(255, 82, 82, 0.808);
+    transition: 0.3s scale;
+    border: 2px solid rgba(255, 74, 42, 0.541);
+    box-shadow: 1px 1px 4px 0px rgba(255, 95, 67, 0.76);
 }
 
 nav .p-wrapper input {
@@ -251,6 +265,9 @@ nav .p-wrapper input {
 }
 nav .p-wrapper input:user-invalid {
     outline: red;
+}
+nav button#edit {
+    box-shadow: 0px 0px 2px 0px #fcc120;
 }
 nav button#edit.edit-mode {
     width: 6rem;
