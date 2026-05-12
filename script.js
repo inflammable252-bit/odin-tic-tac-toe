@@ -256,6 +256,9 @@ function restartGame() {
       }
       else {
         currentGame.autoNext();
+        if (!checkGameOver() && currentGame.currentBoard.getError()) {
+        currentGame.currentBoard.setError("");
+        }
         updateBoard()
       }
     }
@@ -351,21 +354,46 @@ function restartGame() {
     p1Score.textContent = player1.getScore();
     p2Score.textContent = player2.getScore();
   }
+  
+  const editButton=document.getElementById("edit");
+  editButton.addEventListener("click", () => {
+    const names = document.querySelectorAll("nav .p-wrapper span#name")
+    const nameInputs = document.querySelectorAll("nav .p-wrapper input");
+    if (editButton.classList.contains("edit-mode")) {
+      names.forEach((span) => {
+        span.style.display="inline-block";
+        })
+      nameInputs.forEach((input) => {
+        input.style.display="none";
+        if (input.value.length > 1) {
+          (input.parentNode).id === "p1" ? player1.name = input.value : player2.name = input.value;
+          message.textContent = "Names must be one or more characters."
+          }
+        })
+      editButton.classList.remove("edit-mode");
+      editButton.textContent = "Edit players"
+      updateScore()
+    }
+    else {
+      names.forEach((span) => {
+        span.style.display="none";
+        })
+      nameInputs.forEach((input) => {
+        input.style.display="inline-block";
+        (input.parentNode).id === "p1" ? input.value = player1.name : input.value = player2.name;
+        })
+      editButton.classList.add("edit-mode");
+      editButton.textContent = "Submit"
+    }
+  })
+
   return { autoRound, displayTotal, markCell, updateBoard }
 };
 
-// console.log(currentGame.currentPlayer.icon)
-Play().autoRound()
-// currentGame.next(1,1)
 
-// Play().updateBoard()
-// Play().markCell(0,0);
-// Play().markCell(0)
-// Play().markCell(1)
-// Play().markCell(2)
-// Play().markCell(3)
-// Play().markCell(4)
-// Play().markCell(1)
+
+Play().autoRound()
+
 
 
 

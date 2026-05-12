@@ -220,10 +220,9 @@ nav div#game-edit {
     gap: clamp(3px, 0.6vw, 1rem);
 }
 nav button#round {
-    border: 3px solid green;
+    border: 3px solid rgba(85, 175, 85, 0.692);
     transition: 0.4s;
 }
-
 nav button#round.off {
     color: black;
     background-color: var(--themeMed);
@@ -235,9 +234,26 @@ nav button#round.off {
 nav button.off:active {
     box-shadow: none;
 }
-
 nav button.confirm {
     scale: 1.05;
-    transition: 0.2s;
-    border: 3px solid red;
+    transition: 0.3s;
+    border: 3px solid rgba(255, 82, 82, 0.808);
 }
+
+nav .p-wrapper input {
+    border-radius: 8px;
+    border: none;
+    margin: 0px 0.5ch;
+    width: 12ch;
+    height: 1.5rem;
+    display: none;
+    padding-left: 3px;
+}
+nav .p-wrapper input:user-invalid {
+    outline: red;
+}
+nav button#edit.edit-mode {
+    width: 6rem;
+}
+
+
