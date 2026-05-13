@@ -182,8 +182,11 @@ function Game() { // factory with functions to retrieve, request, and interpret 
   const returnWinStatus = function() {
     return winStatus
   }
+  function returnCurrentPlayer() {
+    return currentPlayer
+  }
 
-  return { currentBoard, displayBoard, currentPlayer, next, returnRemaining, autoNext, returnWinStatus }
+  return { currentBoard, displayBoard, returnCurrentPlayer, next, returnRemaining, autoNext, returnWinStatus }
 }
 
 function Play() { //uses Game() functions to play a round and display to the DOM
@@ -303,6 +306,7 @@ function restartGame() {
       }
     updateMsg()
     updateScore()
+    selectNextPlayer()
   }
   function updateRoundButton(set) {
     const roundButton = document.getElementById("round");
@@ -386,6 +390,21 @@ function restartGame() {
       editButton.textContent = "Submit"
     }
   })
+
+  function selectNextPlayer() {
+    const iconP1 = document.getElementById("p1-icon");
+    const iconP2 = document.getElementById("p2-icon");
+    let next = currentGame.currentPlayer;
+    console.log(next)
+    if (currentGame.returnCurrentPlayer() === player1) {
+      iconP1.classList.add("next");
+      iconP2.classList.remove("next")
+    }
+    if (currentGame.returnCurrentPlayer() === player2) {
+      iconP2.classList.add("next");
+      iconP1.classList.remove("next")
+    }
+  }
 
   return { autoRound, displayTotal, markCell, updateBoard }
 };
