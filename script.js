@@ -359,37 +359,49 @@ function restartGame() {
     p2Score.textContent = player2.getScore();
   }
   
-  const editButton=document.getElementById("edit");
+  const editButton = document.getElementById("edit");
   editButton.addEventListener("click", () => {
-    const names = document.querySelectorAll("nav .p-wrapper span#name")
+    const names = document.querySelectorAll("nav .p-wrapper span#name");
     const nameInputs = document.querySelectorAll("nav .p-wrapper input");
+    const isLength = () => {
+      return (Array.from(nameInputs)).every((input) => {return input.value.length > 1})
+    }
     if (editButton.classList.contains("edit-mode")) {
-      names.forEach((span) => {
-        span.style.display="inline-block";
-        })
-      nameInputs.forEach((input) => {
-        input.style.display="none";
-        if (input.value.length > 1) {
-          (input.parentNode).id === "p1" ? player1.name = input.value : player2.name = input.value;
-          message.textContent = "Names must be one or more characters."
-          }
-        })
-      editButton.classList.remove("edit-mode");
-      editButton.textContent = "Edit players"
-      updateScore()
+      if (!isLength()) {
+        message.textContent = "Names must be one or more characters."
+        return;
+      };
+      names.forEach((span) => {span.style.display="inline-block"});
     }
     else {
-      names.forEach((span) => {
-        span.style.display="none";
-        })
-      nameInputs.forEach((input) => {
-        input.style.display="inline-block";
-        (input.parentNode).id === "p1" ? input.value = player1.name : input.value = player2.name;
-        })
       editButton.classList.add("edit-mode");
-      editButton.textContent = "Submit"
-    }
-  })
+      editButton.textContent = "Submit";
+      names.forEach((span) => {span.style.display="none"});
+      nameInputs.forEach((input) => {input.style.display="inline-block"});
+      (input.parentNode).id === "p1" ? input.value = player1.name : input.value = player2.name
+      
+      if (isLength()) {
+      editButton.classList.remove("edit-mode");
+      editButton.textContent = "Edit players";
+      (input.parentNode).id === "p1" ? player1.name = input.value : player2.name = input.value;
+        }
+    updateScore()
+      }
+    });
+    
+      // nameInputs.forEach((input) => {
+      //   input.style.display="none";
+      //   if (input.value.length > 1) {
+      //     editButton.classList.remove("edit-mode");
+      //     editButton.textContent = "Edit players"
+      //     updateScore()
+      //     }
+      //   else {
+      //     (input.parentNode).id === "p1" ? player1.name = input.value : player2.name = input.value;
+      //     message.textContent = "Names must be one or more characters."
+      //     return
+      //   }
+      //   })
 
   function selectNextPlayer() {
     const iconP1 = document.getElementById("p1-icon");

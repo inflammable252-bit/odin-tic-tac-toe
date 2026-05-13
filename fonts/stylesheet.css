@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Lekton';
+    src: url('Lekton-Bold.woff2') format('woff2'),
+        url('Lekton-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lekton';
+    src: url('Lekton-Italic.woff2') format('woff2'),
+        url('Lekton-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lekton';
+    src: url('Lekton-Regular.woff2') format('woff2'),
+        url('Lekton-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
