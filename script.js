@@ -190,6 +190,7 @@ function Game() { // factory with functions to retrieve, request, and interpret 
 }
 
 (function Play() { //uses Game() functions to play a round and display to the DOM
+  updateScore()
   let numberOfCells = currentGame.returnRemaining().length;
   function autoRound() {
     if (currentGame.returnWinStatus()) {
