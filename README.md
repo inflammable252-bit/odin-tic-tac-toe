@@ -28,6 +28,7 @@ This proved to be the most complicated part of designing the game, as the DOM ca
 
 #### Playing against the computer
 autoNext() and autoRound() functions were created to automatically play the game. autoNext() uses functions to identify eligible [row, col] pairs and make a random selection. autoRound() will run autoNext() while the game has not met a win or tie condition. autoRound() was specifically used for testing and is not currently present on the UI.
+Note: The random selection is simply based on a generated number. Filtering the array of [row, col] pairs that getRandomChoice() uses is a potential way to narrow its choices to cells that are closer to a winning condition.
 
 #### Experimenting with CSS
 As with the other similar curriculum projects completed, additional techniques were explored:
