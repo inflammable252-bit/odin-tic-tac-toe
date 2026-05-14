@@ -24,7 +24,7 @@ Objects for players functions, board functions, and game functions were establis
 ![Preview of page](preview.png)
 
 The IIFE Play() serves as the "main" function of the game, connecting the Game() functions to the DOM. All event listeners are located here, as well as functions to restart the game or round and edit player names. Toggling behavior for elements are consequently here. This includes an edit/submit mode for editing player names, a confirmation mode for restarting the game, and a game-in-progress state to prevent starting a new round.
-This proved to be the most complicated part of designing the game, as the DOM can "communicate" very differently from the different game objects.
+This proved to be the most complicated part of designing the game, as the DOM can "communicate" very differently from the different game objects. Passing certain information throughout objects, such as the correct message for errors or wins, and discovering side-effects was particularly challenging.
 
 #### Playing against the computer
 autoNext() and autoRound() functions were created to automatically play the game. autoNext() uses functions to identify eligible [row, col] pairs and make a random selection. autoRound() will run autoNext() while the game has not met a win or tie condition. autoRound() was specifically used for testing and is not currently present on the UI.
@@ -40,7 +40,7 @@ As with the other similar curriculum projects completed, additional techniques w
 
 There are undoubtedly many ways to simplify the object roles and interactions. Some notable cases:
 
-- The use of a coordinate system for the board (board[2] would be the entire third row of the board, and the column would be determined by the index of that array) helped in identifying specific cells locations for win conditions or remaining spaces. However, it complicated interactions with the DOM, as the cells retrieved from the UI were a NodeList. Recognizing this discrepancy early could have assisted in planning.
+- The use of a coordinate system for the board (board[2] would be the entire third row of the board, and the column would be determined by the index of that array) helped in identifying specific cell locations for win conditions or remaining spaces. However, it complicated interactions with the DOM, as the cells retrieved from the UI were a NodeList. Recognizing this discrepancy early could have assisted in either planning accordingly or using a different method entirely (like a [magic square](https://en.wikipedia.org/wiki/Magic_square)).
 - Similarly, the conversions between human-friendly coordinates like .next(1,1) to an array[index] form of (board[0])[0] led to complications in creating functions. Using index values in .next() would likely have been sufficient for this project, unless a user is expected to manually give coordinates.
 - The distinction between Board() and Game() became muddled. There is some redundancy between the two, and better communication between their functions would simplify the way the game is run.
 - Play() also very quickly became a "mega function", holding all event listener functions, certain checks, and the autoRound() function. It could have potentially been minimized or allocated differently.
