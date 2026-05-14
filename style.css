@@ -98,7 +98,7 @@ article div.cell {
     margin: 1px;
     position: relative;
     background: rgba(39, 39, 39, 0.856);
-    background: linear-gradient(141deg, rgba(39, 39, 39, 0.856) 34%, rgba(27, 27, 27, 0.425) 45%, rgba(37, 37, 37, 0.85) 56%);
+    background: linear-gradient(141deg, rgba(53, 53, 53, 0.904) 34%, rgba(36, 36, 36, 0.521) 45%, rgba(53, 53, 53, 0.87) 56%);
     background-attachment: fixed;
     background-size: 100%;
 }
