@@ -189,7 +189,7 @@ function Game() { // factory with functions to retrieve, request, and interpret 
   return { currentBoard, displayBoard, returnCurrentPlayer, next, returnRemaining, autoNext, returnWinStatus }
 }
 
-function Play() { //uses Game() functions to play a round and display to the DOM
+(function Play() { //uses Game() functions to play a round and display to the DOM
   let numberOfCells = currentGame.returnRemaining().length;
   function autoRound() {
     if (currentGame.returnWinStatus()) {
@@ -407,11 +407,9 @@ function restartGame() {
   }
 
   return { autoRound, displayTotal, markCell, updateBoard }
-};
+}())
 
 
-
-Play().autoRound()
 
 
 
